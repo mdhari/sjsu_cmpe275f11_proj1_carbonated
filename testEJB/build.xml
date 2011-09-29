@@ -1,0 +1,43 @@
+<project name="testEJB" default="jar" basedir=".">
+
+	<target name="init">
+		<property name="src.dir" value="${basedir}/ejbModule" />
+		<property name="classes.dir" value="${basedir}/classes" />
+		<property name="out.dir" value="${basedir}/build" />
+		<property name="jboss.home" value="/opt/jboss" />
+		<property name="jboss.deploy" value="${jboss.home}/server/default/deploy" />
+	</target>
+
+	<target name="build" depends="init">
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${out.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" >
+			<classpath>
+				<fileset dir="${jboss.home}/client">
+					<include name="**/*.jar"/>
+				</fileset>
+				<pathelement location="${classes.dir}"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="deploy" depends="clean,jar">
+		<copy file="${out.dir}/testEJB.jar" toDir="${jboss.deploy}" />
+	</target>
+	
+	<target name="jar" depends="build">
+		<mkdir dir="${out.dir}" />
+
+		<jar destfile="${out.dir}/testEJB.jar">
+			<fileset dir="${classes.dir}">
+				<include name="**/carbonated/**" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="clean" depends="init">
+		<delete dir="${classes.dir}" quiet="true" />
+		<delete dir="${out.dir}" quiet="true" />
+	</target>
+
+</project>
