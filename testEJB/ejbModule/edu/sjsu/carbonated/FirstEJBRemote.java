@@ -1,7 +1,6 @@
 package edu.sjsu.carbonated;
-import javax.ejb.Remote;
+import java.io.Serializable;
 
-@Remote
-public interface FirstEJBRemote {
-
+public interface FirstEJBRemote extends Serializable {
+	String echo(String filename);
 }
